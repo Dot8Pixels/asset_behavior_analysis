@@ -1,9 +1,9 @@
 import traceback
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
-import seaborn as sns
+import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
 import yfinance as yf
 from scipy.stats import kurtosis, norm, skew
@@ -88,47 +88,90 @@ if asset_df is not None:
 
     with col1:
         st.subheader("📈 Daily Return with Rolling Mean and ±1/2 SD Bands")
-        fig, ax = plt.subplots(figsize=(10, 5))
-        ax.plot(
-            asset_df.index,
-            asset_df["Return"],
-            label="Daily Return",
-            alpha=0.3,
-            color="blue",
+
+        # Create the time series plot with Plotly
+        fig = go.Figure()
+
+        # Add daily returns
+        fig.add_trace(
+            go.Scatter(
+                x=asset_df.index,
+                y=asset_df["Return"],
+                mode="lines",
+                name="Daily Return",
+                line=dict(color="rgba(0, 0, 255, 0.3)"),
+            )
         )
-        ax.plot(asset_df.index, asset_df["Mean_30"], label="30-Day Mean", color="black")
-        ax.plot(
-            asset_df.index,
-            asset_df["+1SD"],
-            linestyle="dashed",
-            color="gold",
-            label="+1 SD",
+
+        # Add 30-day mean
+        fig.add_trace(
+            go.Scatter(
+                x=asset_df.index,
+                y=asset_df["Mean_30"],
+                mode="lines",
+                name="30-Day Mean",
+                line=dict(color="black"),
+            )
         )
-        ax.plot(
-            asset_df.index,
-            asset_df["-1SD"],
-            linestyle="dashed",
-            color="gold",
-            label="-1 SD",
+
+        # Add +1 SD line
+        fig.add_trace(
+            go.Scatter(
+                x=asset_df.index,
+                y=asset_df["+1SD"],
+                mode="lines",
+                name="+1 SD",
+                line=dict(color="gold", dash="dash"),
+            )
         )
-        ax.plot(
-            asset_df.index,
-            asset_df["+2SD"],
-            linestyle="dashed",
-            color="red",
-            label="+2 SD",
+
+        # Add -1 SD line
+        fig.add_trace(
+            go.Scatter(
+                x=asset_df.index,
+                y=asset_df["-1SD"],
+                mode="lines",
+                name="-1 SD",
+                line=dict(color="gold", dash="dash"),
+            )
         )
-        ax.plot(
-            asset_df.index,
-            asset_df["-2SD"],
-            linestyle="dashed",
-            color="red",
-            label="-2 SD",
+
+        # Add +2 SD line
+        fig.add_trace(
+            go.Scatter(
+                x=asset_df.index,
+                y=asset_df["+2SD"],
+                mode="lines",
+                name="+2 SD",
+                line=dict(color="red", dash="dash"),
+            )
         )
-        ax.legend()
-        ax.set_ylabel("Daily Return")
-        ax.set_xlabel("Date")
-        st.pyplot(fig)
+
+        # Add -2 SD line
+        fig.add_trace(
+            go.Scatter(
+                x=asset_df.index,
+                y=asset_df["-2SD"],
+                mode="lines",
+                name="-2 SD",
+                line=dict(color="red", dash="dash"),
+            )
+        )
+
+        # Update layout
+        fig.update_layout(
+            template="none",
+            xaxis_title="Date",
+            yaxis_title="Daily Return",
+            legend=dict(
+                orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1
+            ),
+            height=400,
+            margin=dict(l=60, r=60, t=60, b=60),
+            hovermode="x unified",
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
         st.subheader("📊 Daily Return Summary (%)")
@@ -165,57 +208,93 @@ if asset_df is not None:
         summary_df.index.name = "Metric"
         st.dataframe(summary_df)
 
-    # Histogram Plot
+    # Distribution Plot with Plotly
     st.subheader("📊 Distribution: Daily Returns vs Normal Distribution")
 
-    fig, ax = plt.subplots(figsize=(10, 5))
-    sns.histplot(
-        asset_df[["Return"]],
-        bins=50,  # You can modify bins dynamically
-        kde=False,
-        color="lightblue",
-        stat="density",
-        label="Observed Return",
+    # Create histogram with Plotly
+    histogram_fig = go.Figure()
+
+    # Add histogram
+    histogram_fig.add_trace(
+        go.Histogram(
+            x=asset_df["Return"],
+            nbinsx=100,
+            opacity=0.6,
+            name="Observed Return",
+            marker_color="lightblue",
+            histnorm="probability density",
+        )
     )
-    xmin, xmax = plt.xlim()
-    x_vals = np.linspace(xmin, xmax, 100)
-    ax.plot(
-        x_vals,
-        norm.pdf(x_vals, asset_df["Return"].mean(), asset_df["Return"].std()),
-        color="red",
-        label="Normal Distribution",
+
+    # Generate normal distribution curve
+    returns = asset_df["Return"]
+    x_range = np.linspace(returns.min(), returns.max(), 100)
+    y_range = norm.pdf(x_range, returns.mean(), returns.std())
+
+    # Add normal distribution line
+    histogram_fig.add_trace(
+        go.Scatter(
+            x=x_range,
+            y=y_range,
+            mode="lines",
+            name="Normal Distribution",
+            line=dict(color="red"),
+        )
     )
-    ax.axvline(
-        asset_df["Return"].mean(), color="black", linestyle="dashed", label="Mean"
+
+    # Add vertical lines for mean and standard deviations
+    histogram_fig.add_vline(
+        x=returns.mean(),
+        line_dash="dash",
+        line_color="black",
+        annotation_text="Mean",
+        annotation_position="top right",
     )
-    ax.axvline(
-        asset_df["Return"].mean() + asset_df["Return"].std(),
-        color="gold",
-        linestyle="dashed",
-        label="+1 SD",
+
+    histogram_fig.add_vline(
+        x=returns.mean() + returns.std(),
+        line_dash="dash",
+        line_color="gold",
+        annotation_text="+1 SD",
+        annotation_position="top right",
     )
-    ax.axvline(
-        asset_df["Return"].mean() - asset_df["Return"].std(),
-        color="gold",
-        linestyle="dashed",
-        label="-1 SD",
+
+    histogram_fig.add_vline(
+        x=returns.mean() - returns.std(),
+        line_dash="dash",
+        line_color="gold",
+        annotation_text="-1 SD",
+        annotation_position="top right",
     )
-    ax.axvline(
-        asset_df["Return"].mean() + 2 * asset_df["Return"].std(),
-        color="red",
-        linestyle="dashed",
-        label="+2 SD",
+
+    histogram_fig.add_vline(
+        x=returns.mean() + 2 * returns.std(),
+        line_dash="dash",
+        line_color="red",
+        annotation_text="+2 SD",
+        annotation_position="top right",
     )
-    ax.axvline(
-        asset_df["Return"].mean() - 2 * asset_df["Return"].std(),
-        color="red",
-        linestyle="dashed",
-        label="-2 SD",
+
+    histogram_fig.add_vline(
+        x=returns.mean() - 2 * returns.std(),
+        line_dash="dash",
+        line_color="red",
+        annotation_text="-2 SD",
+        annotation_position="top right",
     )
-    ax.legend()
-    ax.set_xlabel("Daily Return")
-    ax.set_ylabel("Density")
-    st.pyplot(fig)
+
+    # Update layout
+    histogram_fig.update_layout(
+        template="none",
+        xaxis_title="Daily Return",
+        yaxis_title="Density",
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        height=400,
+        # margin=dict(l=60, r=60, t=60, b=60),
+        hovermode="x unified",
+    )
+
+    st.plotly_chart(histogram_fig, use_container_width=True)
 
     # Latest Rolling Statistics
     st.subheader("📉 Latest 30-Day Rolling Stats (%)")
@@ -240,6 +319,29 @@ if asset_df is not None:
 
     # Report Section
     st.subheader("📊 Trading Statistics Report")
+
+    # # Create a visual summary of up/down days
+    # updown_fig = go.Figure()
+
+    # # Add pie chart for up/down days
+    # updown_fig.add_trace(
+    #     go.Pie(
+    #         labels=["Positive Days", "Negative Days"],
+    #         values=[up_days, down_days],
+    #         marker_colors=["#66BB6A", "#EF5350"],
+    #         hole=0.4,
+    #         textinfo="percent+label",
+    #         hoverinfo="label+percent+value",
+    #     )
+    # )
+
+    # updown_fig.update_layout(
+    #     title="📈 Distribution of Positive vs Negative Days",
+    #     height=300,
+    #     margin=dict(l=20, r=20, t=50, b=20),
+    # )
+
+    # st.plotly_chart(updown_fig, use_container_width=True)
 
     st.markdown(f"""
     ### 📈 Daily Performance Summary

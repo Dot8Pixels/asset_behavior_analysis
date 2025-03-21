@@ -1,0 +1,293 @@
+{
+  "name": "Python 3.11 Dev Container",
+  "build": {
+    "dockerfile": "../Dockerfile"
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "source=python_cache,target=/usr/local/cargo,type=volume"
+  ],
+  "runArgs": ["--userns=keep-id"],
+  "containerEnv": {
+    "HOME": "/home/vscode"
+  },
+  "remoteEnv": {
+    "HOME": "/home/vscode"
+  },
+  "containerUser": "vscode",
+  "remoteUser": "vscode",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "code-runner.runInTerminal": true,
+        "code-runner.executorMap": {
+          "python": "$pythonPath -u $fullFileName"
+        },
+        "workbench.colorTheme": "Dracula Theme",
+        "python.languageServer": "Pylance",
+        "editor.fontSize": 13,
+        "editor.bracketPairColorization.enabled": true,
+        "editor.guides.bracketPairs": "active",
+        "editor.fontFamily": "Fira Code",
+        "editor.fontLigatures": true,
+        "editor.cursorBlinking": "expand",
+        "editor.cursorSmoothCaretAnimation": "on",
+        "editor.dragAndDrop": false,
+        "breadcrumbs.enabled": true,
+        "editor.tokenColorCustomizations": {
+          "[Dracula]": {
+            "comments": "#d4422f"
+          }
+        },
+        "workbench.iconTheme": "material-icon-theme",
+        "workbench.editor.showTabs": "multiple",
+        "terminal.integrated.scrollback": 1000,
+        "python.terminal.activateEnvironment": true,
+        "editor.minimap.showSlider": "always",
+        "todohighlight.keywords": [
+          {
+            "text": "TODO",
+            "color": "#FFFFFF",
+            "backgroundColor": "#E67E22",
+            "overviewRulerColor": "#E67E22"
+          },
+          {
+            "text": "DEBUG",
+            "color": "#FFFFFF",
+            "backgroundColor": "#E67E22",
+            "overviewRulerColor": "#E67E22"
+          },
+          {
+            "text": "WARNING",
+            "color": "#FFFFFF",
+            "backgroundColor": "#E67E22",
+            "overviewRulerColor": "#E67E22"
+          },
+          {
+            "text": "Warning",
+            "color": "#FFFFFF",
+            "backgroundColor": "#E67E22",
+            "overviewRulerColor": "#E67E22"
+          },
+          {
+            "text": "ERROR",
+            "color": "#FFFFFF",
+            "backgroundColor": "#BB2649",
+            "overviewRulerColor": "#BB2649"
+          },
+          {
+            "text": "Error",
+            "color": "#FFFFFF",
+            "backgroundColor": "#BB2649",
+            "overviewRulerColor": "#BB2649"
+          },
+          {
+            "text": "FIXME",
+            "color": "#FFFFFF",
+            "backgroundColor": "#BB2649",
+            "overviewRulerColor": "#BB2649"
+          },
+          {
+            "text": "GUNTODO:",
+            "color": "#FFFFFF",
+            "backgroundColor": "#BB2649",
+            "overviewRulerColor": "#BB2649"
+          }
+        ],
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true,
+          "editor.guides.bracketPairs": "active",
+          "editor.codeActionsOnSave": {
+            "source.organizeImports": "explicit"
+          }
+        },
+        "isort.args": ["black"],
+        "Prettier-SQL.keywordCase": "upper",
+        "[sql]": {
+          "editor.formatOnSave": true,
+          "editor.defaultFormatter": "inferrinizzard.prettier-sql-vscode"
+        },
+        "[json]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "[jsonc]": {
+          "editor.defaultFormatter": "esbenp.prettier-vscode",
+          "editor.formatOnSave": true
+        },
+        "prettier.tabWidth": 4,
+        "code-runner.clearPreviousOutput": true,
+        "code-runner.saveFileBeforeRun": true,
+        "[markdown]": {
+          "editor.defaultFormatter": "yzhang.markdown-all-in-one",
+          "editor.formatOnSave": true
+        },
+        "[graphql]": {
+          "editor.formatOnSave": true
+        },
+        "[xml]": {
+          "editor.defaultFormatter": "redhat.vscode-xml",
+          "editor.formatOnSave": true
+        },
+        "python.testing.pytestEnabled": true,
+        "python.testing.autoTestDiscoverOnSaveEnabled": true,
+        "testing.gutterEnabled": false,
+        "output.smartScroll.enabled": false,
+        "python.analysis.inlayHints.functionReturnTypes": true,
+        "workbench.colorCustomizations": {
+          "editorUnnecessaryCode.border": "#BE3455",
+          "editorWarning.foreground": "#eaff00",
+          "editorError.foreground": "#ff0000",
+          "editorHint.foreground": "#ff0000",
+          "editorHint.border": "#5900ff",
+          "terminalCursor.foreground": "#00ffaa",
+          "tab.activeBackground": "#3f2b3a",
+          "editorCursor.foreground": "#f4a7bb"
+        },
+        "editor.cursorWidth": 3,
+        "indentRainbow.indicatorStyle": "light",
+        "indentRainbow.lightIndicatorStyleLineWidth": 6,
+        "cSpell.diagnosticLevel": "Hint",
+        "pythonTestExplorer.testFramework": "pytest",
+        "autoDocstring.docstringFormat": "numpy",
+        "autoDocstring.includeName": true,
+        "autoDocstring.startOnNewLine": true,
+        "editor.unicodeHighlight.nonBasicASCII": false,
+        "code-runner.respectShebang": false,
+        "blockman.n33A01B2FromDepth0ToInwardForAllBackgrounds": "45,0,0,2; none",
+        "blockman.n33A02B2FromFocusToOutwardForAllBackgrounds": "!10,1,0,3; hsl(235, 30%, 7%) > hsl(0, 0%, 7.1%) > hsl(0, 0%, 9.5%) > hsl(0, 0%, 11.15%) > hsl(0, 0%, 12.8%)",
+        "blockman.n33A03B1FromDepth0ToInwardForFocusTreeBorders": " !30,1,0,2; neutral > linear-gradient(to right, rgb(144, 54, 8), rgb(48, 36, 116))",
+        "indentRainbow.colors": [
+          "rgba(53, 52, 53,0.15)",
+          "rgba(42, 51, 136,0.15)",
+          "rgba(94, 45, 144, 0.15)",
+          "rgba(123, 28, 125,0.15)",
+          "rgba(218, 18, 75,0.15)",
+          "rgba(239, 83, 61,0.15)",
+          "rgba(246, 140, 31,0.15)",
+          "rgba(246, 140, 31,0.1)",
+          "rgba(246, 140, 31,0.05)",
+          "rgba(246, 140, 31,0.025)"
+        ],
+        "workbench.productIconTheme": "fluent-icons",
+        "errorLens.enabled": false,
+        "errorLens.enabledDiagnosticLevels": ["error", "warning"],
+        "conventionalCommits.autoCommit": false,
+        "markdown-preview-github-styles.colorTheme": "auto",
+        "gitlens.graph.layout": "editor",
+        "git.allowForcePush": true,
+        "git.ignoreRebaseWarning": true,
+        "terminal.integrated.cursorBlinking": true,
+        "window.zoomLevel": 3,
+        "codesnap.realLineNumbers": true,
+        "codesnap.showWindowTitle": true,
+        "codesnap.containerPadding": "1em",
+        "markdown-preview-enhanced.enablePreviewZenMode": true,
+        "markdown-preview-enhanced.codeBlockTheme": "default.css",
+        "markdown-preview-enhanced.previewTheme": "atom-light.css",
+        "markdown-preview-enhanced.revealjsTheme": "blood.css",
+        "redhat.telemetry.enabled": false,
+        "editor.largeFileOptimizations": false,
+        "vim.disableExtension": true,
+        "gitlens.mode.active": "zen",
+        "notebook.formatOnSave.enabled": true,
+        "git-graph.repository.showStashes": false,
+        "python.analysis.typeCheckingMode": "standard",
+        "testExplorer.useNativeTesting": true
+      },
+      "extensions": [
+        "ms-toolsai.jupyter-keymap",
+        "donjayamanne.python-extension-pack",
+        "adpyke.codesnap",
+        "ziyasal.vscode-open-in-github",
+        "codezombiech.gitignore",
+        "njpwerner.autodocstring",
+        "wholroyd.jinja",
+        "donjayamanne.git-extension-pack",
+        "mhutchie.git-graph",
+        "donjayamanne.githistory",
+        "ms-vscode.notepadplusplus-keybindings",
+        "njqdev.vscode-python-typehint",
+        "oderwat.indent-rainbow",
+        "wayou.vscode-todo-highlight",
+        "ms-python.isort",
+        "bierner.github-markdown-preview",
+        "bierner.markdown-checkbox",
+        "bierner.markdown-footnotes",
+        "alexfromxd.showtime",
+        "ryu1kn.partial-diff",
+        "zainchen.json",
+        "shardulm94.trailing-spaces",
+        "bierner.markdown-yaml-preamble",
+        "filwaline.vscode-postfix-python",
+        "inferrinizzard.prettier-sql-vscode",
+        "yzane.markdown-pdf",
+        "mquandalle.graphql",
+        "evondev.indent-rainbow-palettes",
+        "yzhang.markdown-all-in-one",
+        "littlefoxteam.vscode-python-test-adapter",
+        "ms-vscode.remote-explorer",
+        "naumovs.color-highlight",
+        "alefragnani.project-manager",
+        "formulahendry.code-runner",
+        "ms-toolsai.vscode-jupyter-slideshow",
+        "ms-toolsai.vscode-jupyter-cell-tags",
+        "alefragnani.bookmarks",
+        "mtxr.sqltools",
+        "redhat.vscode-yaml",
+        "ms-vscode.remote-server",
+        "pkief.material-product-icons",
+        "esbenp.prettier-vscode",
+        "dracula-theme.theme-dracula",
+        "vivaxy.vscode-conventional-commits",
+        "grapecity.gc-excelviewer",
+        "hbenl.vscode-test-explorer",
+        "bierner.markdown-preview-github-styles",
+        "ms-vscode-remote.remote-ssh-edit",
+        "ms-toolsai.jupyter",
+        "leodevbro.blockman",
+        "ms-vscode-remote.vscode-remote-extensionpack",
+        "visualstudioexptteam.intellicode-api-usage-examples",
+        "visualstudioexptteam.vscodeintellicode",
+        "miguelsolorio.fluent-icons",
+        "ms-vscode-remote.remote-wsl",
+        "ms-toolsai.jupyter",
+        "ms-toolsai.jupyter-renderers",
+        "graphql.vscode-graphql-syntax",
+        "graphql.vscode-graphql",
+        "ms-vscode.test-adapter-converter",
+        "bpruitt-goddard.mermaid-markdown-syntax-highlighting",
+        "shd101wyy.markdown-preview-enhanced",
+        "bierner.markdown-mermaid",
+        "redhat.vscode-xml",
+        "christian-kohler.path-intellisense",
+        "vscodevim.vim",
+        "ms-python.vscode-pylance",
+        "ms-vscode-remote.remote-containers",
+        "ms-python.debugpy",
+        "ms-toolsai.jupyter",
+        "ms-vscode-remote.remote-ssh",
+        "kamikillerto.vscode-colorize",
+        "bierner.markdown-emoji",
+        "tamasfe.even-better-toml",
+        "kevinrose.vsc-python-indent",
+        "donjayamanne.python-environment-manager",
+        "ms-vsliveshare.vsliveshare",
+        "streetsidesoftware.code-spell-checker",
+        "ms-toolsai.datawrangler",
+        "davidanson.vscode-markdownlint",
+        "takumii.markdowntable",
+        "usernamehw.errorlens",
+        "ms-azuretools.vscode-docker",
+        "gitlab.gitlab-workflow",
+        "eamodio.gitlens",
+        "charliermarsh.ruff",
+        "ms-python.python",
+        "pkief.material-icon-theme",
+        "mechatroner.rainbow-csv"
+      ]
+    }
+  },
+  "postCreateCommand": "pip install --upgrade pip && pip install uv"
+}
